@@ -1,4 +1,3 @@
-
 import { environment } from '@/config/environment';
 import axios from 'axios';
 import { Session } from 'next-auth';
@@ -18,20 +17,22 @@ const instance = axios.create({
   timeout: 60 * 1000,
 });
 
+// Interceptor request tanpa langsung menggunakan async/await
 instance.interceptors.request.use(
   async (request) => {
-    const session: CustomSession | null = await getSession();
-    if (session && session.accessToken) {
-      request.headers.Authorization = `Bearer ${session.accessToken}`;
-    }
-    return request;
+    return getSession().then((session: CustomSession | null) => {
+      if (session && session.accessToken) {
+        request.headers.Authorization = `Bearer ${session.accessToken}`;
+      }
+      return request;
+    });
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
 instance.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
 export default instance;
