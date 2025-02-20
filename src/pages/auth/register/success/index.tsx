@@ -1,7 +1,7 @@
 // Menggunakan folder pages untuk routing URL
 
 import AuthLayout from "@/components/layouts/AuthLayout";
-import RegisterSuccess from "@/components/views/RegisterSuccess";
+import RegisterSuccess from "@/components/views/Auth/RegisterSuccess";
 
 const RegisterPage = () => {
   return (

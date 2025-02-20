@@ -5,7 +5,7 @@ const headers = {
     "Content-Type": "application/json"
 }
 
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: environment.API_URL,
     headers,
     timeout: 60 * 1000
