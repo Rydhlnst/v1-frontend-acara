@@ -1,6 +1,6 @@
 
 import DataTable from '@/components/ui/DataTable'
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useCallback, Key, ReactNode, useEffect } from 'react'
@@ -9,17 +9,20 @@ import { COLUMN_LISTS_CATEGORY } from './Category.constant';
 import { LIMIT_LISTS } from '@/constants/list.constants';
 import useCategory from './useCategory';
 import InputFile from '@/components/ui/InputFile';
+import AddCategoryModal from './AddCategoryModal';
 
 const Category = () => {
   const {push, isReady, query} = useRouter();
-  const {setURL, dataCategory, isLoadingCategory, currentLimit, currentPage, isRefetchinCategory, handleChangeLimit, handleChangePage, handleClearSearch, handleSearch} = useCategory();
+  const {setURL, dataCategory, isLoadingCategory, currentLimit, currentPage, isRefetchingCategory, handleChangeLimit, handleChangePage, handleClearSearch, handleSearch, refetchCategory} = useCategory();
+
+  const addCategoryModal = useDisclosure();
 
   // Mengecek isReady??
   useEffect(() => {
     if(isReady) {
       setURL();
     }
-  })
+  }, [isReady])
 
   const renderCell = useCallback(
     (category: Record<string, unknown>, columnKey: Key) => {
@@ -49,9 +52,9 @@ const Category = () => {
   return (
     <section>
       {Object.keys(query).length > 0 && (
-        <DataTable isLoading={isLoadingCategory || isRefetchinCategory} columns={COLUMN_LISTS_CATEGORY} currentPage={Number(currentPage)} onChangePages={handleChangePage} totalPages={dataCategory?.pagination.totalPages} data={dataCategory?.data || []} limit={String(currentLimit)} onChangeLimit={handleChangeLimit} onChangeSearch={handleSearch} onClearSearch={handleClearSearch} buttonTopContent='Create Category' onClickButtonTopContent={() => {}} renderCell = {renderCell} emptyContent="Category is Empty"/>
+        <DataTable isLoading={isLoadingCategory || isRefetchingCategory} columns={COLUMN_LISTS_CATEGORY} currentPage={Number(currentPage)} onChangePages={handleChangePage} totalPages={dataCategory?.pagination.totalPages} data={dataCategory?.data || []} limit={String(currentLimit)} onChangeLimit={handleChangeLimit} onChangeSearch={handleSearch} onClearSearch={handleClearSearch} buttonTopContent='Create Category' onClickButtonTopContent={addCategoryModal.onOpen} renderCell = {renderCell} emptyContent="Category is Empty"/>
       )}
-        <InputFile name='input' isDropable/>
+      <AddCategoryModal {...addCategoryModal} refetchCategory={refetchCategory}/>
     </section>
 
   )

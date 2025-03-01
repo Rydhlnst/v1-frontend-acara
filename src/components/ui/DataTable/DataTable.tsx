@@ -29,7 +29,7 @@ const DataTable = (props: PropTypes) => {
                 <Input isClearable className='w-full sm:max-w-[24%]' placeholder='Search by name' startContent={<CiSearch/>} onClear={onClearSearch} onChange={onChangeSearch}/>
                 {buttonTopContent && (
                     <Button color='danger' onPress={onClickButtonTopContent}>
-
+                        Create Category
                     </Button>
                 )}
             </div>
