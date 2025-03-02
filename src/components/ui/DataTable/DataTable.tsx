@@ -1,4 +1,4 @@
-import LIMIT_LISTS from '@/constants/list.constants';
+import {LIMIT_LISTS} from '@/constants/list.constants';
 import { cn } from '@/utils/cn';
 import { button, Button, Input, Pagination, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import React, { ChangeEvent, Key, ReactNode, use, useMemo } from 'react'
@@ -38,8 +38,8 @@ const DataTable = (props: PropTypes) => {
 
     const BottomContent = useMemo(() => {
         return (
-            <div className='flex items-center justify-center lg:justify-between px-2 py-2'>
-                <Select size='md' selectedKeys={[limit]} selectionMode='single' onChange={onChangeLimit} className='hidden max-w-36 lg:block' startContent={
+            <div className='flex items-center justify-center lg:justify-between'>
+                <Select size='md' selectedKeys={[limit]} disallowEmptySelection selectionMode='single' onChange={onChangeLimit} className='hidden max-w-36 lg:block' startContent={
                     <p className='text-small'>Show:</p>
                 }>
                     {LIMIT_LISTS.map((item) => (
@@ -48,7 +48,9 @@ const DataTable = (props: PropTypes) => {
                         </SelectItem>
                     ))}
                 </Select>
-                <Pagination isCompact showControls color='danger' page={currentPage} total={totalPages} onChange={onChangePages}/>
+                {totalPages > 1 && (
+                    <Pagination isCompact showControls color='danger' page={currentPage} total={totalPages} onChange={onChangePages} loop/>
+                )}
             </div>
         )
     }, [limit, currentPage, totalPages, onChangeLimit, onChangePages])
